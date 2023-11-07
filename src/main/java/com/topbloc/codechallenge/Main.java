@@ -15,13 +15,14 @@ public class Main {
                     return "OK";
                 });
 
-        get("/version", (req, res) -> "TopBloc Code Challenge v1.0");
+        // Don't change - if required you can reset your database by hitting this endpoint at localhost:4567/reset
         get("/reset", (req, res) -> {
             DatabaseManager.resetDatabase();
             return "OK";
         });
 
-        //TODO: Add your routes here
+        //TODO: Add your routes here. a couple of examples are below
         get("/items", (req, res) -> DatabaseManager.getItems());
+        get("/version", (req, res) -> "TopBloc Code Challenge v1.0");
     }
 }

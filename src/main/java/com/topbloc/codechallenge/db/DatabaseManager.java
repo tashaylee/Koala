@@ -29,7 +29,7 @@ public class DatabaseManager {
             System.out.println(e.getMessage());
         }
     }
-    // Schema functions to reset the database if needed - do not change
+    // Schema function to reset the database if needed - do not change
     public static void resetDatabase() {
         try {
             conn.close();
@@ -46,6 +46,7 @@ public class DatabaseManager {
         seedDatabase();
     }
 
+    // Schema function to reset the database if needed - do not change
     private static void applySchema() {
         String itemsSql = "CREATE TABLE IF NOT EXISTS items (\n"
                 + "id integer PRIMARY KEY,\n"
@@ -53,7 +54,7 @@ public class DatabaseManager {
                 + ");";
         String inventorySql = "CREATE TABLE IF NOT EXISTS inventory (\n"
                 + "id integer PRIMARY KEY,\n"
-                + "item integer NOT NULL references items(id),\n"
+                + "item integer NOT NULL UNIQUE references items(id) ON DELETE CASCADE,\n"
                 + "stock integer NOT NULL,\n"
                 + "capacity integer NOT NULL\n"
                 + ");";
@@ -61,10 +62,10 @@ public class DatabaseManager {
                 + "id integer PRIMARY KEY,\n"
                 + "name text NOT NULL UNIQUE\n"
                 + ");";
-        String distributorPrices = "CREATE TABLE IF NOT EXISTS distributor_prices (\n"
+        String distributorPricesSql = "CREATE TABLE IF NOT EXISTS distributor_prices (\n"
                 + "id integer PRIMARY KEY,\n"
-                + "distributor integer NOT NULL references distributors(id),\n"
-                + "item integer NOT NULL references items(id),\n"
+                + "distributor integer NOT NULL references distributors(id) ON DELETE CASCADE,\n"
+                + "item integer NOT NULL references items(id) ON DELETE CASCADE,\n"
                 + "cost float NOT NULL\n" +
                 ");";
 
@@ -73,13 +74,14 @@ public class DatabaseManager {
             conn.createStatement().execute(itemsSql);
             conn.createStatement().execute(inventorySql);
             conn.createStatement().execute(distributorSql);
-            conn.createStatement().execute(distributorPrices);
+            conn.createStatement().execute(distributorPricesSql);
             System.out.println("Schema applied");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    // Schema function to reset the database if needed - do not change
     private static void seedDatabase() {
         String itemsSql = "INSERT INTO items (id, name) VALUES (1, 'Licorice'), (2, 'Good & Plenty'),\n"
             + "(3, 'Smarties'), (4, 'Tootsie Rolls'), (5, 'Necco Wafers'), (6, 'Wax Cola Bottles'), (7, 'Circus Peanuts'), (8, 'Candy Corn'),\n"
@@ -88,7 +90,7 @@ public class DatabaseManager {
                 + "(1, 22, 25), (2, 4, 20), (3, 15, 25), (4, 30, 50), (5, 14, 15), (6, 8, 10), (7, 10, 10), (8, 30, 40), (9, 17, 70), (10, 43, 65),\n" +
                 "(11, 32, 55), (12, 25, 45), (13, 8, 45), (14, 10, 60), (15, 20, 30), (16, 15, 35), (17, 14, 60)";
         String distributorSql = "INSERT INTO distributors (id, name) VALUES (1, 'Candy Corp'), (2, 'The Sweet Suite'), (3, 'Dentists Hate Us')";
-        String distributorPrices = "INSERT INTO distributor_prices (distributor, item, cost) VALUES \n" +
+        String distributorPricesSql = "INSERT INTO distributor_prices (distributor, item, cost) VALUES \n" +
                 "(1, 1, 0.81), (1, 2, 0.46), (1, 3, 0.89), (1, 4, 0.45), (2, 2, 0.18), (2, 3, 0.54), (2, 4, 0.67), (2, 5, 0.25), (2, 6, 0.35), (2, 7, 0.23), (2, 8, 0.41), (2, 9, 0.54),\n" +
                 "(2, 10, 0.25), (2, 11, 0.52), (2, 12, 0.07), (2, 13, 0.77), (2, 14, 0.93), (2, 15, 0.11), (2, 16, 0.42), (3, 10, 0.47), (3, 11, 0.84), (3, 12, 0.15), (3, 13, 0.07), (3, 14, 0.97),\n" +
                 "(3, 15, 0.39), (3, 16, 0.91), (3, 17, 0.85)";
@@ -98,7 +100,7 @@ public class DatabaseManager {
             conn.createStatement().execute(itemsSql);
             conn.createStatement().execute(inventorySql);
             conn.createStatement().execute(distributorSql);
-            conn.createStatement().execute(distributorPrices);
+            conn.createStatement().execute(distributorPricesSql);
             System.out.println("Database seeded");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,7 +108,7 @@ public class DatabaseManager {
     }
 
 
-    // Conversion functions to convert ResultSet to JSON - change if desired, but should not be required
+    // Helper methods to convert ResultSet to JSON - change if desired, but should not be required
     private static JSONArray convertResultSetToJson(ResultSet rs) throws SQLException{
         ResultSetMetaData md = rs.getMetaData();
         int columns = md.getColumnCount();
