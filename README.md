@@ -49,7 +49,7 @@ has the following feature requirements to complete their work:
 - Feel free to go about this in any way you see fit. You can add any classes or methods you need, and you can modify classes and methods that aren't
 explicitly marked as with a comment saying not to modify.
 - Any data returned from the API should be in JSON format. Responses that return no data can return anything, as long as it also returns a 200 on a success
-or a 400 on a failure. Bonus points for proper error messaging!
+or a 400/500 on a failure. Bonus points for proper error messaging!
 - Avoid using external libraries that are not already included if possible.
 - The database is already populated with some data, but feel free to add more if you need to.
 - Any approach is valid. For example, no points will be taken off for doing business logic via Java if you are not particularly familiar with SQL.
