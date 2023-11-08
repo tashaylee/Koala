@@ -47,7 +47,7 @@ has the following feature requirements to complete their work:
   
 ## Considerations
 - Feel free to go about this in any way you see fit. You can add any classes or methods you need, and you can modify classes and methods that aren't
-explicitly marked as with a comment saying not to modify.
+explicitly marked with a comment saying not to modify.
 - Any data returned from the API should be in JSON format. Responses that return no data can return anything, as long as it also returns a 200 on a success
 or a 400/500 on a failure. Bonus points for proper error messaging!
 - Avoid using external libraries that are not already included if possible.
