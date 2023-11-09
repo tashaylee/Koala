@@ -11,7 +11,7 @@ public class Main {
         options("/*",
                 (req, res) -> {
                     res.header("Access-Control-Allow-Headers", "content-type");
-                    res.header("Access-Control-Allow-Methods", "GET, POST");
+                    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
                     return "OK";
                 });
 
